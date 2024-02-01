@@ -5,6 +5,7 @@ import math
 import threading
 import sys
 from display_qt import DisplayQT
+from display_web import DisplayWeb
 # from PySide6.QtWidgets import QApplication
 
 class BasicRenderer:
@@ -25,14 +26,14 @@ class BasicRenderer:
         self.displays = []
 
         # Store important canvas parameters
-        self.canvas_width, self.canvas_height = config.qt_canvas_size
+        self.canvas_width, self.canvas_height = config.QT["canvas_size"]
 
     def add_display(self, display):
         """
         Add a display class instance to the list of display classes.
         Start the display in a separate thread.
         """
-        thread = threading.Thread(target=display.start_display)
+        thread = threading.Thread(target=display.start)
         thread.start()
         self.displays.append(display)
     
@@ -160,12 +161,11 @@ if __name__ == "__main__":
     renderer = BasicRenderer()
 
     # Instantiate DisplayQT and add the display to the BasicRenderer
-    display_qt = DisplayQT()
-    renderer.add_display(display_qt)
+    # display_qt = DisplayQT()
+    # renderer.add_display(display_qt)
+    display_web = DisplayWeb()
+    renderer.add_display(display_web)
     print("Display added")
-
-    # app.exec_()  # Start the event loop
-    print("Event loop started")
 
     # Clear the frame and draw some static lines
     renderer.frame_start()  # Clears the screen

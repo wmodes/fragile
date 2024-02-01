@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fragile Display</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/fragile.css') }}">
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+    <script>
+        // Create a global JavaScript variable for the configuration
+        const config = {{ config | tojson }};
+    </script>
+    <script src="{{ url_for('static', filename='js/fragile.js') }}" DEFER></script>
+</head>
+<body>
+    <div id="content">
+        <div id="canvas-with-controls"> 
+            <div id="canvas-container">
+                <canvas id="displayCanvas"></canvas>
+            </div>
+            <div id="controls">
+                <button id="startButton">Start</button>
+                <button id="stopButton">Stop</button>
+                <button id="clearButton">Clear</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
