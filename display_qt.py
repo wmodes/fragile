@@ -355,7 +355,7 @@ class DisplayQT:
             end_x, end_y = line[1]
 
             # Calculate a fixed rotation angle for the line (e.g., 1 degree)
-            rotation_angle = math.radians(2)  # Change the angle as needed
+            rotation_angle = math.radians(1)  # Change the angle as needed
 
             # Accumulate the rotation angle for this line
             if len(self.rotation_angles) <= index:
