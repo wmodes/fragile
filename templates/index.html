@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Fragile Display</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/fragile.css') }}">
     <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
     <script>
@@ -18,9 +20,16 @@
                 <canvas id="displayCanvas"></canvas>
             </div>
             <div id="controls">
-                <button id="startButton">Start</button>
-                <button id="stopButton">Stop</button>
-                <button id="clearButton">Clear</button>
+                <!-- <button id="startButton">Fringing</button>
+                <button id="stopButton">Hotspots</button> -->
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="switch-fringing" checked>
+                    <label class="form-check-label" for="switch-fringing">Fringing</label>
+                </div>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="switch-hotspots" checked>
+                    <label class="form-check-label" for="switch-hotspots">Hotspots</label>
+                </div>
             </div>
         </div>
     </div>

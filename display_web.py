@@ -3,6 +3,7 @@ from flask_socketio import SocketIO
 import threading
 import time
 import config
+import math
 
 class DisplayWeb:
     def __init__(self):
@@ -20,6 +21,7 @@ class DisplayWeb:
         def handle_connect():
             print("Client connected")
             self.send_test()
+            # self.animation_test()
             # You can also emit messages back to the client if needed
             # emit('message', {'data': 'Connected to server'})
 
@@ -63,25 +65,128 @@ class DisplayWeb:
         self.socketio.emit('message', {'command': 'drawCubicBezier', 'params': {'points': points}})
         # print(f"Draw cubic Bezier curve from {p0} to {p3}")
 
+    #
+    # TEST CODE
+    #
+        
     def send_test(self):
         """
         Send a test message to the client.
         """
-        display.frame_start()     
+        print("Sending test geometry")
+        self.frame_start()     
 
-        display.draw_point((300, 600))  # Draw a point away from the line
+        self.draw_point((300, 600))  # Draw a point away from the line
 
         # Draw lines
-        display.draw_line((100, 100), (900, 700))  # Diagonal line across the canvas
-        display.draw_line((500, 50), (500, 750))   # Vertical line
+        self.draw_line((100, 100), (900, 700))  # Diagonal line across the canvas
+        self.draw_line((500, 50), (500, 750))   # Vertical line
 
         # Draw a cubic Bezier curve
         p0 = (100, 700)   # Starting point
         p1 = (300, 200)   # Control point 1
         p2 = (700, 200)   # Control point 2
         p3 = (900, 700)   # Ending point
-        display.draw_cubic_bezier(p0, p1, p2, p3)
-        time.sleep(0.25)
+        self.draw_cubic_bezier(p0, p1, p2, p3)
+
+        # time.sleep(60)
+
+        # self.frame_start() 
+        # self.draw_line((500, 50), (500, 750))
+        # time.sleep(1)
+
+        # self.frame_start() 
+        # self.draw_line((450, 50), (450, 750))
+        # time.sleep(1)
+
+        # self.frame_start() 
+        # self.draw_line((400, 50), (400, 750))
+        # time.sleep(1)
+
+        # self.frame_start() 
+        # self.draw_line((350, 50), (350, 750))
+        # time.sleep(1)
+
+        # self.frame_start() 
+        # self.draw_line((300, 50), (300, 750))
+        # time.sleep(1)
+
+        # self.frame_start() 
+        # self.draw_line((250, 50), (250, 750))
+        # time.sleep(1)
+
+        # self.frame_start() 
+        # self.draw_line((200, 50), (200, 750))
+        # time.sleep(1)
+
+        # self.frame_start() 
+        # self.draw_line((150, 50), (150, 750))
+        # time.sleep(1)
+
+        # self.frame_start() 
+        # self.draw_line((100, 50), (100, 750))
+        # time.sleep(1)
+
+        # self.frame_start() 
+        # self.draw_line((50, 50), (50, 750))
+        # time.sleep(1)
+
+     
+    def animation_test(self, duration=120):
+        """
+        Run the animation test for a given duration.
+        """
+        print("Animation test started")
+        self.initialize_test_lines()
+        end_time = time.time() + duration
+
+        while time.time() < end_time:
+            self.update_lines()
+            time.sleep(0.1)  # Update every 0.1 seconds
+            self.frame_end()  # You might want to implement this to push updates if using websockets
+
+    def initialize_test_lines(self):
+        """
+        Initialize test lines for the animation.
+        """
+        self.test_lines = [
+            [[500, 500], [1500, 1500]],
+            [[500, 1500], [1500, 500]],
+            [[1000, 100], [1000, 1900]],
+            [[100, 1000], [1900, 1000]]
+        ]
+        self.rotation_angles = [0] * len(self.test_lines)
+
+    def update_lines(self):
+        """
+        Update the animation state for each line and redraw elements.
+        """
+        self.frame_start()  # Clear the frame before drawing
+
+        for index, line in enumerate(self.test_lines):
+            p0, p1 = line
+            rotation_angle = math.radians(1)  # Rotate 1 degree
+            self.rotation_angles[index] += rotation_angle
+
+            # Rotate each line around its center
+            center_x = (p0[0] + p1[0]) / 2
+            center_y = (p0[1] + p1[1]) / 2
+            new_p0 = self.rotate_point(p0, center_x, center_y, self.rotation_angles[index])
+            new_p1 = self.rotate_point(p1, center_x, center_y, self.rotation_angles[index])
+
+            # Draw the line with the updated endpoints
+            self.draw_line((new_p0[0], new_p0[1]), (new_p1[0], new_p1[1]))
+
+    def rotate_point(self, point, cx, cy, angle):
+        """
+        Rotate a point around a given center.
+        """
+        s, c = math.sin(angle), math.cos(angle)
+        x, y = point[0] - cx, point[1] - cy
+        new_x = x * c - y * s + cx
+        new_y = x * s + y * c + cy
+        return (new_x, new_y)
+
 
 # Test condition
 if __name__ == "__main__":
@@ -89,4 +194,7 @@ if __name__ == "__main__":
     display.start()
     print("Web display started. Connect at http://127.0.0.1:5000/")
 
+
+# TODO: Make sure this abstracts to the next level
+# TODO: Add animation test
 

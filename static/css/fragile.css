@@ -3,7 +3,7 @@ body, html {
   height: 100%;
   margin: 0;
   padding: 0;
-  background-color: #000; /* Assuming a dark theme for contrast */
+  background-color: #202020; /* Assuming a dark theme for contrast */
   color: white;
 }
 
@@ -26,6 +26,10 @@ body, html {
   border: solid 1px gray;
 }
 
+canvas {
+  background-color: black;
+}
+
 #displayCanvas {
   position: absolute;
   top: 0;
@@ -38,7 +42,39 @@ body, html {
   display: flex;
   flex-direction: column;
   margin-left: 20px;
-  align-items: center;
+  align-items: left;
+}
+
+.form-check-input {
+  background-color: #777;
+}
+
+.form-check-input:checked {
+  background-color: #3263ac;
+  border-color: #3263ac;
+}
+
+#controls button {
+  width: 75px;
+  /* color: #fff;
+  background-color: #337ab7;
+  border-color: #2e6da4;
+  display: inline-block;
+  margin-bottom: 0;
+  font-weight: 400;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  -ms-touch-action: manipulation;
+  touch-action: manipulation;
+  cursor: pointer;
+  background-image: none;
+  border: 1px solid transparent;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  border-radius: 4px;
+  text-transform: none; */
 }
 
 #controls button {
