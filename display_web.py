@@ -4,12 +4,24 @@ import threading
 import time
 import config
 import math
+import gevent.monkey
+gevent.monkey.patch_all()
 
 class DisplayWeb:
+    """
+    DisplayWeb runs a flask and socket server with it's own even loop running independently sending commands to a javascript app running in a webpage that it serves up. DisplayWeb is subservient to a BasicRenderer class which views DisplayWeb as a black box. The BasicRenderer class sends commands to DisplayWeb which are then sent to the javascript app running in the webpage. The javascript app then renders the commands on the canvas. DisplayWeb is responsible for:
+    - Running a flask and socket server with it's own event loop
+    - Serving up the webpage and static files, css, js, img, etc.
+    - Sending commands as signals to a javascript client running in a webpage
+    - Handling client connections and disconnections
+    - Handling signals from the client
+    - Running a test animation
+    """
     def __init__(self):
         self.app = Flask(__name__)
         self.app.config['SECRET_KEY'] = 'secret!'
-        self.socketio = SocketIO(self.app, cors_allowed_origins="*")
+        self.socketio = SocketIO(self.app, cors_allowed_origins="*", async_mode='gevent')
+        self.is_connected = False
 
         # route for serving the index.html file
         @self.app.route('/')
@@ -19,15 +31,22 @@ class DisplayWeb:
         # route for detecting client connection
         @self.socketio.on('connect')
         def handle_connect():
+            self.is_connected = True
             print("Client connected")
-            self.send_test()
             # self.animation_test()
             # You can also emit messages back to the client if needed
             # emit('message', {'data': 'Connected to server'})
+        
+        @self.socketio.on('disconnect')
+        def handle_disconnect():
+            self.is_connected = False
+            print("Client disconnected")
+            # Your disconnect handling code...
 
     def start(self):
         # Run the Flask app in a separate thread
         threading.Thread(target=self.socketio.run, args=(self.app,)).start()
+        print("Web display started. Connect at http://127.0.0.1:5000/")
 
     # Define methods for rendering commands
     def frame_start(self):
@@ -89,47 +108,47 @@ class DisplayWeb:
         p3 = (900, 700)   # Ending point
         self.draw_cubic_bezier(p0, p1, p2, p3)
 
-        # time.sleep(60)
+        gevent.sleep(5)
 
         # self.frame_start() 
         # self.draw_line((500, 50), (500, 750))
-        # time.sleep(1)
+        # gevent.sleep(1000)
 
         # self.frame_start() 
         # self.draw_line((450, 50), (450, 750))
-        # time.sleep(1)
+        # gevent.sleep(1000)
 
         # self.frame_start() 
         # self.draw_line((400, 50), (400, 750))
-        # time.sleep(1)
+        # gevent.sleep(1000)
 
         # self.frame_start() 
         # self.draw_line((350, 50), (350, 750))
-        # time.sleep(1)
+        # gevent.sleep(1000)
 
         # self.frame_start() 
         # self.draw_line((300, 50), (300, 750))
-        # time.sleep(1)
+        # gevent.sleep(1000)
 
         # self.frame_start() 
         # self.draw_line((250, 50), (250, 750))
-        # time.sleep(1)
+        # gevent.sleep(1000)
 
         # self.frame_start() 
         # self.draw_line((200, 50), (200, 750))
-        # time.sleep(1)
+        # gevent.sleep(1000)
 
         # self.frame_start() 
         # self.draw_line((150, 50), (150, 750))
-        # time.sleep(1)
+        # gevent.sleep(1000)
 
         # self.frame_start() 
         # self.draw_line((100, 50), (100, 750))
-        # time.sleep(1)
+        # gevent.sleep(1000)
 
         # self.frame_start() 
         # self.draw_line((50, 50), (50, 750))
-        # time.sleep(1)
+        # gevent.sleep(1000)
 
      
     def animation_test(self, duration=120):
@@ -142,7 +161,7 @@ class DisplayWeb:
 
         while time.time() < end_time:
             self.update_lines()
-            time.sleep(0.1)  # Update every 0.1 seconds
+            gevent.sleep(10)  # Update every 0.1 seconds
             self.frame_end()  # You might want to implement this to push updates if using websockets
 
     def initialize_test_lines(self):
@@ -192,9 +211,9 @@ class DisplayWeb:
 if __name__ == "__main__":
     display = DisplayWeb()
     display.start()
-    print("Web display started. Connect at http://127.0.0.1:5000/")
 
 
 # TODO: Make sure this abstracts to the next level
 # TODO: Add animation test
+# TODO: Use a WSSGI server like gunicorn
 

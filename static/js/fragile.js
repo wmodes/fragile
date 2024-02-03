@@ -51,7 +51,7 @@ class DisplayWebClient {
     console.log('WebSocket URL:', this.ws.url);
   }
 
-  handleSocketMessage(data) {
+  async handleSocketMessage(data) {
     console.log('Received message:', data);
     switch (data.command) {
       case 'frameStart':

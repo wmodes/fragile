@@ -33,16 +33,24 @@ class BasicRenderer:
         Add a display class instance to the list of display classes.
         Start the display in a separate thread.
         """
-        thread = threading.Thread(target=display.start)
-        thread.start()
+        # thread = threading.Thread(target=display.start)
+        # thread.start()
+        display.start()  # Assumes display.start() is already non-blocking
         self.displays.append(display)
     
     def execute_command(self, command, *args):
         """
-        Emit a command signal to all displays.
+        Directly call a method on all displays corresponding to the command.
         """
         for display in self.displays:
-            display.command_signal.emit(command, args)  
+            # Check if the display has the method corresponding to the command
+            if hasattr(display, command):
+                method = getattr(display, command)
+                if callable(method):
+                    # Call the method with args
+                    method(*args)
+            else:
+                print(f"Display does not support command: {command}")
 
     # Specific drawing methods can utilize the generic execute_on_all_displays
     def frame_start(self):
@@ -167,6 +175,8 @@ if __name__ == "__main__":
     renderer.add_display(display_web)
     print("Display added")
 
+    while not display_web.is_connected:
+        time.sleep(0.1)
     # Clear the frame and draw some static lines
     renderer.frame_start()  # Clears the screen
     renderer.draw_line([100, 100], [300, 300])
