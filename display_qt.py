@@ -84,13 +84,13 @@ class DisplayQT:
         # Set the window properties
         self.view.setFrameStyle(QGraphicsView.NoFrame)
         self.window.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        self.window.setMinimumSize(*config.qt_min_win_size)
+        self.window.setMinimumSize(*config.QT["min_win_size"])
 
         # Default colors for stroke and fill
-        self.stroke_color = QColor(*config.qt_default_stroke_color) 
-        self.fill_color = QColor(*config.qt_default_fill_color)
-        self.color_fringing_on = config.qt_color_fringing_on  # Boolean for whether the laser glow effect is on
-        self.fringing_color = QColor(*config.qt_fringing_color) 
+        self.stroke_color = QColor(*config.QT["default_stroke_color"]) 
+        self.fill_color = QColor(*config.QT["default_fill_color"])
+        self.color_fringing_on = config.QT["color_fringing_on"]  # Boolean for whether the laser glow effect is on
+        self.fringing_color = QColor(*config.QT["fringing_color"]) 
 
         # Initialize an array to record each line, point, spline, or square
         # and clear the screen
@@ -116,24 +116,24 @@ class DisplayQT:
         self.scene.clear()
 
         # Set the background color
-        self.scene.setBackgroundBrush(QColor(*config.qt_bkgd_color))
+        self.scene.setBackgroundBrush(QColor(*config.QT["bkgd_color"]))
 
         # clear the elements array
         self.elements_array = []
 
-    def set_stroke_color(self, r, g, b, a=config.qt_default_alpha):
+    def set_stroke_color(self, r, g, b, a=config.QT["default_alpha"]):
         """
         Set the stroke color for drawing.
         """
         self.stroke_color = QColor(r, g, b, a)
 
-    def set_fill_color(self, r, g, b, a=config.qt_default_alpha):
+    def set_fill_color(self, r, g, b, a=config.QT["default_alpha"]):
         """
         Set the fill color for drawing.
         """
         self.fill_color = QColor(r, g, b, a)
 
-    def draw_point(self, x, y, size=config.qt_point_size):
+    def draw_point(self, x, y, size=config.QT["point_size"]):
         """
         Draw a point at the specified coordinates (x, y).
         """
@@ -204,7 +204,7 @@ class DisplayQT:
 
     # Additional drawing methods can be added here
 
-    def draw_with_fringing(self, original_item, fringe_width=config.qt_fringe_width):
+    def draw_with_fringing(self, original_item, fringe_width=config.QT["fringe_width"]):
         """
         Apply a glow effect to the given QGraphicsItem if self.color_fringing_on is True.
 
@@ -231,7 +231,7 @@ class DisplayQT:
 
             display_object.setPen(pen)
             display_object.setOpacity(opacity)
-            display_object.setZValue(config.qt_fringe_z_value)  # Set the z-value for the glow
+            display_object.setZValue(config.QT["fringe_z_value"])  # Set the z-value for the glow
             self.scene.addItem(display_object)
 
         # Add the original item on top of its glow
@@ -241,7 +241,7 @@ class DisplayQT:
         """
         Draw a hotspot at the specified coordinates (x, y).
         """
-        size = config.qt_hotspot_size  # Diameter of the hotspot
+        size = config.QT["hotspot_size"]  # Diameter of the hotspot
         hotspot = QGraphicsEllipseItem(x - size / 2, y - size / 2, size, size)
         hotspot.setBrush(self.stroke_color)  # Set the color of the hotspot's fill
         pen = QPen(self.stroke_color)  # Use the stroke_color for the border as well
@@ -383,13 +383,13 @@ class DisplayQT:
             # Draw the line with the updated endpoints
             self.draw_line(new_start_x, new_start_y, new_end_x, new_end_y)
 
-        if config.qt_hotspots_on:
+        if config.QT["hotspots_on"]:
             self.draw_all_hotspots()  # Draw hotspots
 
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    canvas_width, canvas_height = config.qt_canvas_size  # Example canvas size
+    canvas_width, canvas_height = config.QT["canvas_size"]  # Example canvas size
 
     display = DisplayQT(canvas_width, canvas_height)
     display.animation_test()  # Initialize and start the line animation

@@ -18,15 +18,10 @@ Inspired by Robert Henke's "Fragile Territories," "Fragile" is a project that co
 The design of "Fragile" is guided by principles that emphasize simplicity, modularity, and the practical aspects of software development. Here’s a distilled overview based on the technical structure of the project:
 
 1. **Modularity:** The system's architecture is compartmentalized into independent modules (VisualComposer, BasicRenderer, DisplayQT), facilitating isolated development and testing. This design allows for easier integration of new features or display technologies.
-
 1. **Flexibility:** Designed to adapt to a range of environments, "Fragile" supports customizable settings for visual patterns, enabling adjustments for different spaces or audience interactions.
-
 1. **Maintainability:** The project employs clean code practices, such as comprehensive commenting and adherence to coding standards, to ensure ease of updates and straightforward debugging.
-
 1. **Scalability:** The architecture is prepared for future expansion, be it through enhanced performance for larger installations or the addition of more complex visual interactions.
-
 1. **Interactivity Potential:** While the initial implementation focuses on non-interactive patterns, the system's structure is conducive to adding interactive elements that could respond to environmental changes or audience presence.
-
 1. **Performance Considerations:** Acknowledging the demands of real-time visual rendering, optimizations are in place to ensure fluidity in the projection of patterns, crucial for maintaining the immersive experience of the artwork.
 
 This philosophy underscores a pragmatic approach to developing an art installation that balances artistic intent with technical feasibility, ensuring "Fragile" remains both an evocative art piece and a testament to thoughtful software design.
